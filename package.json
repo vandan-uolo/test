@@ -1,7 +1,7 @@
 {
   "author": {
-    "name": "ElectricPe",
-    "url": ""
+    "name": "Stefan Wüthrich",
+    "url": "https://altafino.com"
   },
   "keywords": [
     "react",
@@ -11,7 +11,7 @@
     "tailwind"
   ],
   "license": "MIT",
-  "name": "ElectricPe - Web",
+  "name": "react-webpack-5-tailwind-2",
   "version": "1.0.1",
   "description": "ElectricPe",
   "dependencies": {
