@@ -188,16 +188,17 @@ class Form extends Component {
                         </label>
                         <div className="block">
                             <div className="flex flex-row justify-end">
-                                <input className="
+                                <button className="
                                                 block
                                                 m-1
                                                 px-10 py-3
                                                 rounded-md
                                                 bg-gray-100
                                                 border-transparent
+                                                cursor-pointer
                                               "
                                        onClick={this.onSubmit}
-                                       value="Submit"/>
+                                        value="Submit">Submit</button>
                             </div>
                         </div>
                     </form>
