@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import React from "react";
 import './app.styles.scss';
 import axios from "axios";
 import {Puff} from "react-loading-icons";
@@ -6,6 +7,11 @@ import {Puff} from "react-loading-icons";
 class Form extends Component {
     constructor() {
         super();
+        this.autocompleteInput = React.createRef();
+        this.autocompleteInput2 = React.createRef();
+        this.autocomplete = null;
+        this.autocomplete2 = null;
+        this.handlePlaceChanged = this.handlePlaceChanged.bind(this);
         this.state = {
             name: '',
             phone: '',
@@ -18,10 +24,40 @@ class Form extends Component {
         }
     }
 
+    componentDidMount() {
+        // var options = {
+        //     types: ['geocode'],
+        //     componentRestrictions: {country: "india", state: "bangalore"}
+        // };
+        this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.current,
+            {"types": ["geocode"]});
+        this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current,
+            {"types": ["geocode"]});
+
+        this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
+
+        this.autocomplete2.addListener('place_changed', this.handleAnotherPlaceChanged);
+    }
+
+    handlePlaceChanged() {
+        const place = this.autocomplete.getPlace();
+        debugger;
+        this.setState({
+            address: place,
+        })
+    }
+
+    handleAnotherPlaceChanged() {
+        const place2 = this.autocomplete2.getPlace();
+        debugger;
+        this.setState({
+            anotherLocation: place2,
+        })
+    }
+
     onSubmit = e => {
-        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && this.state.latitude !== null &&
-            this.state.longitude !== null;
-        console.log('isFormFilled : '+ isFormFilled);
+        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && this.state.latitude !== null && this.state.longitude !== null;
+        console.log('isFormFilled : ' + isFormFilled);
         isFormFilled && axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
             name: this.state.name,
             phone: this.state.phone,
@@ -49,9 +85,7 @@ class Form extends Component {
             console.log("Latitude is :", position.coords.latitude);
             console.log("Longitude is :", position.coords.longitude);
             this.setState({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                fetchingLocation: false,
+                latitude: position.coords.latitude, longitude: position.coords.longitude, fetchingLocation: false,
             });
         });
         e.preventDefault();
@@ -135,6 +169,9 @@ class Form extends Component {
                             <input
                                 type="text"
                                 name={"address"}
+                                ref={this.autocompleteInput}
+                                id="autocomplete"
+                                placeholder="Search your location..."
                                 className="
                                             mt-1
                                             block
@@ -144,9 +181,8 @@ class Form extends Component {
                                             border-transparent
                                             focus:border-gray-500 focus:bg-white focus:ring-0
                                           "
-                                placeholder={"Search location"}
                                 required
-                            />
+                                type="text"/>
                         </label>
                         <label className="block">
                             <span className="text-gray-700 font-normal">What type of place is this?</span>
@@ -173,18 +209,21 @@ class Form extends Component {
                         </label>
                         <label className="block">
                             <span className="text-gray-700 font-normal">Suggest another location?</span>
-                            <textarea
+                            <input
+                                type="text"
+                                name={"anotherLocation"}
+                                ref={this.autocompleteInput2}
+                                placeholder="Search your location..."
                                 className="
-                                    mt-1
-                                    block
-                                    w-full
-                                    rounded-md
-                                    bg-gray-100
-                                    border-transparent
-                                    focus:border-gray-500 focus:bg-white focus:ring-0
-                                  "
-                                rows="3"
-                            ></textarea>
+                                            mt-1
+                                            block
+                                            w-full
+                                            rounded-md
+                                            bg-gray-100
+                                            border-transparent
+                                            focus:border-gray-500 focus:bg-white focus:ring-0
+                                          "
+                                type="text"/>
                         </label>
                         <div className="block">
                             <div className="flex flex-row justify-end">
@@ -197,8 +236,9 @@ class Form extends Component {
                                                 border-transparent
                                                 cursor-pointer
                                               "
-                                       onClick={this.onSubmit}
-                                        value="Submit">Submit</button>
+                                        onClick={this.onSubmit}
+                                        value="Submit">Submit
+                                </button>
                             </div>
                         </div>
                     </form>
