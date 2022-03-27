@@ -121,7 +121,7 @@ class Form extends Component {
     render() {
         return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
             <div className="flex flex-row">
-                <div className={'pr-12 w-2/3'}>
+                <div className={'pr-12 w-2/3 mt-2'}>
                     <h2 className="text-3xl font-bold text-left py-5">
                         The future is Electric. Be part of it. </h2>
                     <p className="text-l font-normal text-left py-2">ElectricPe is India's largest Electric
@@ -132,8 +132,8 @@ class Form extends Component {
                         and around your premises and win exciting rewards and EV Prizes. We'll start by collecting some
                         basic demographic information.</p>
                 </div>
-                <div className="mt-8 m-auto">
-                    <p className="text-l font-normal text-left font-bold">You just have to suggest the location, We
+                <div className="p-10 pt-8 rounded-lg m-auto bg-white">
+                    <p className="text-l font-normal text-left font-bold mb-5">You just have to suggest the location, We
                         will do the rest to electrify your location.</p>
                     <form className="grid grid-cols-1 gap-6">
                         <label className="block">
