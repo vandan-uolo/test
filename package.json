@@ -1,7 +1,7 @@
 {
   "author": {
-    "name": "Stefan Wüthrich",
-    "url": "https://altafino.com"
+    "name": "ElectricPe",
+    "url": ""
   },
   "keywords": [
     "react",
@@ -11,9 +11,9 @@
     "tailwind"
   ],
   "license": "MIT",
-  "name": "react-webpack-5-tailwind-2",
+  "name": "ElectricPe - Web",
   "version": "1.0.1",
-  "description": "Webpack 6 boilerplate with React 17, Tailwind 2, using babel, sass, with HMR and an optimized production build",
+  "description": "ElectricPe",
   "dependencies": {
     "axios": "^0.26.1",
     "react": "^17.0.2",
