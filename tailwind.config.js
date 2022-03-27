@@ -2,7 +2,12 @@ module.exports = {
   purge: ['./src/**/*.js'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        elegreen: '#4CBB17',
+        borderGray: '#666666',
+      },
+    },
   },
   variants: {
     extend: {},

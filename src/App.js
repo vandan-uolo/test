@@ -4,13 +4,15 @@ import Logo from './assets/altafino.svg'
 import './app.styles.scss'
 import Form from "./Form";
 
+
 class App extends Component {
+  elocation = require('./assets/icons/elocation.png');
+  giftBox = require('./assets/icons/gift-box.png');
+  elogo = require('./assets/icons/electric_pe_logo.png');
   render() {
     return (
-      <div className='flex-1 items-center justify-center m-10 mx-24'>
-        <div className='text-black bg-green-100 font-bold rounded-lg border shadow-lg p-10'>
-          <Form/>
-        </div>
+      <div className='flex-1 items-center py-6 justify-center' style={{backgroundColor: '#F2FAEF'}}>
+          <Form elocation={this.elocation} giftBox={this.giftBox} elogo={this.elogo}/>
       </div>
     )
   }

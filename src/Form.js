@@ -2,7 +2,7 @@ import {Component} from 'react'
 import React from "react";
 import './app.styles.scss';
 import axios from "axios";
-import {Puff} from "react-loading-icons";
+import {Puff} from "react-loading-icons"
 
 class Form extends Component {
     constructor() {
@@ -17,7 +17,7 @@ class Form extends Component {
             phone: '',
             latitude: null,
             longitude: null,
-            address: '',
+            address: ' ',
             localityType: '',
             anotherLocation: '',
             fetchingLocation: false,
@@ -55,25 +55,21 @@ class Form extends Component {
     }
 
     onSubmit = e => {
-        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && ((this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== null) && this.state.anotherLocation !== null;
-        console.log('isFormFilled : ' + isFormFilled);
-
-        isFormFilled && axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
+        debugger;
+        axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
             name: this.state.name,
             phone: this.state.phone,
             latitude: this.state.latitude,
             longitude: this.state.longitude,
-            address: this.state.address,
             locality: this.state.localityType,
+        }).then(response => {
+            debugger;
+            console.log('Form submission successful!!');
+            alert('Form submission successful!!');
+        }).catch((err) => {
+            debugger;
+            alert('Form submission failed !!');
         })
-            .then(response => {
-                debugger;
-                console.log('Form submission successful!!');
-                alert('Form submission successful!!');
-            }).catch((err) => {
-                debugger;
-                alert('Form submission failed !!');
-            })
     }
 
     validatePhoneNumber(input_str) {
@@ -118,166 +114,193 @@ class Form extends Component {
         e.preventDefault();
     }
 
-    render() {
-        return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
-            <div className="flex flex-row">
-                <div className={'pr-12 w-2/3 mt-2'}>
-                    <h2 className="text-3xl font-bold text-left py-5">
-                        The future is Electric. Be part of it. </h2>
-                    <p className="text-l font-normal text-left py-2">ElectricPe is India's largest Electric
-                        Vehicle Charging Stations Network. Electric Vehicle Ecosystem needs more and more distributed
-                        charging stations to help
-                        champions like you to switch to electric.</p>
-                    <p className="text-l font-normal left py-2">Help ElectricPe by suggesting a location in
-                        and around your premises and win exciting rewards and EV Prizes. We'll start by collecting some
-                        basic demographic information.</p>
+
+    renderContent = () => {
+        return <div className={'w-full p-5 md:w-2/5'} style={{backgroundColor: '#F2FAEF'}}>
+            <img className={'h-8 my-2 self-start'} src={this.props.elogo}/>
+            <h2 className="text-4xl font-semibold text-left py-5">
+                Suggest and <br/><span className={'text-elegreen'}>earn</span></h2>
+            <p className="text-sm font-light text-left py-2 opacity-60">Help India’s largest Charging Station Network to setup
+                locations and exciting cash rewards</p>
+            <h3 className={'mt-5 font-semibold'}>How it works?</h3>
+            <div className={'flex flex-row mb-10 mt-2'}>
+                <div className={"w-1/3 bg-white m-1 py-4 px-2 flex flex-col rounded-sm text-center justify-center"}>
+                    <img className={'h-7 w-7 self-center'} src={this.props.elocation}/>
+                    <p className={"text-xs mt-2"}>Suggest a location</p>
                 </div>
-                <div className="p-10 pt-8 rounded-lg m-auto bg-white">
-                    <p className="text-l font-normal text-left font-bold mb-5">You just have to suggest the location, We
-                        will do the rest to electrify your location.</p>
-                    <form className="grid grid-cols-1 gap-6">
-                        <label className="block">
-                            <span className="text-gray-700 font-normal">
-                                Please tell us your full name?
+                <div className={"w-1/3 bg-white m-1 py-4 px-2 flex flex-col rounded-sm text-center justify-center"}>
+                    <img className={'h-7 w-7 self-center'} src={this.props.giftBox}/>
+                    <p className={"text-xs mt-2"}>Redeem your reward</p>
+                </div>
+                <div className={"w-1/3 bg-white m-1 py-4 px-2 flex flex-col rounded-sm text-center justify-center"}>
+                    <img className={'h-7 w-7 self-center'} src={this.props.elocation}/>
+                    <p className={"text-xs mt-2"}>Share with friends</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    renderForm = () => {
+        return <div className="p-6 pt-8 m-auto bg-white">
+            <p className="text-l font-normal text-left font-semibold mb-5">Let’s start with a quick intro?</p>
+            <form className="grid grid-cols-1 gap-6">
+                <label className="block">
+                            <span className="text-gray-700 text-sm font-semibold font-normal">
+                                Your name
                                 <span className="text-red-600 font-normal"> *</span>
                             </span>
-                            <input
-                                type="text"
-                                name={'name'}
-                                className="
+                    <input
+                        type="text"
+                        name={'name'}
+                        className="
                                             mt-1
                                             block
                                             w-full
-                                            rounded-md
-                                            bg-gray-100
-                                            border-transparent
-                                            focus:border-gray-500 focus:bg-white focus:ring-0
+                                            rounded-sm
+                                            border
+                                            border-gray-300
+                                            placeholder-gray-400
+                                            font-light
+                                            focus:border-gray-300 focus:bg-white focus:ring-0
                                           "
-                                placeholder={'Your name'}
-                                onChange={this.changeHandler}
-                                required
-                            />
-                        </label>
-                        <label className="block">
-                            <span className="text-gray-700 font-normal">
-                                Please tell us your phone number
+                        placeholder={'Type your full name'}
+                        onChange={this.changeHandler}
+                        required
+                    />
+                </label>
+                <label className="block">
+                            <span className="text-gray-700 text-sm font-semibold font-normal">
+                                Phone number
                                 <span className="text-red-600 font-normal"> *</span>
                             </span>
-                            <input
-                                type="text"
-                                name={'phone'}
-                                className="
+                    <input
+                        type="text"
+                        name={'phone'}
+                        className="
                                             mt-1
                                             block
                                             w-full
-                                            rounded-md
-                                            bg-gray-100
-                                            border-transparent
-                                            focus:border-gray-500 focus:bg-white focus:ring-0
+                                            rounded-sm
+                                            border
+                                            border-gray-300
+                                            placeholder-gray-400
+                                            font-light
+                                            focus:border-gray-300 focus:bg-white focus:ring-0
                                           "
-                                placeholder="+91-9876543210"
-                                pattern="(6|7|8|9)\d{9}"
-                                onChange={this.changeHandler}
-                                required
-                            />
-                        </label>
-                        <label className="block">
-                            <span className="text-gray-700 font-normal">
-                                Please suggest the location where you
-                                would want to have an Electric Vehicle Charging Station?
+                        placeholder="+91-"
+                        pattern="(6|7|8|9)\d{9}"
+                        onChange={this.changeHandler}
+                        required
+                    />
+                </label>
+                <label className="block">
+                            <span className="text-gray-700 text-sm font-semibold font-normal">
+                                Where would you like to have an EV charging station?
                                 <span className="text-red-600 font-normal"> *</span>
                             </span>
-                            {this.state.fetchingLocation && <Puff stroke="#000"/>}
-                            {this.state.latitude !== null && this.state.longitude !== null &&
-                                <p className="text-green-500 my-3 font-normal">Location fetch successful !!</p>}
-                            {this.state.latitude == null && this.state.longitude == null && <button className="
-                                                block
+                    {this.state.latitude !== null && this.state.longitude !== null &&
+                        <p className="text-elegreen my-3 font-normal">Location fetch successful!</p>}
+                    {this.state.latitude == null && this.state.longitude == null &&
+                        <button className="block
                                                 mt-3
-                                                py-3
+                                                py-2
                                                 px-5
-                                                rounded-md
-                                                bg-gray-100
-                                                border-transparent
-                                                focus:border-black-500 focus:ring-1
+                                                w-full
+                                                text-elegreen
+                                                rounded-sm
+                                                bg-white
+                                                border
+                                                border-elegreen
+                                                focus:border-black-500 focus:ring-0
                                               "
-                                                                                                    onClick={(e) => this.getCoordinates(e)}
-                            >Use current location
-                            </button>}
-                            <p className="text-gray-700 my-3 font-normal">OR</p>
-                            <input
-                                type="text"
-                                name={"address"}
-                                ref={this.autocompleteInput}
-                                id="autocomplete"
-                                placeholder="Search your location..."
-                                className="
+                        onClick={(e) => this.getCoordinates(e)}
+                    >Use current location
+                    </button>}
+                    {this.state.fetchingLocation && <Puff size={15} stroke="#4CBB17"/>}
+                    <p className="text-gray-700 my-3 font-normal">OR</p>
+                    <input
+                        type="text"
+                        name={"address"}
+                        ref={this.autocompleteInput}
+                        id="autocomplete"
+                        placeholder="Search a location"
+                        className="
                                             mt-1
                                             block
                                             w-full
-                                            rounded-md
-                                            bg-gray-100
-                                            border-transparent
-                                            focus:border-gray-500 focus:bg-white focus:ring-0
+                                            border
+                                            border-gray-300
+                                            placeholder-gray-400
+                                            font-light
+                                            focus:border-gray-300 focus:bg-white focus:ring-0
                                           "
-                                type="text"/>
-                        </label>
-                        <label className="block">
-                            <span className="text-gray-700 font-normal">
+                        type="text"/>
+                </label>
+                <label className="block">
+                            <span className="text-gray-700 text-sm font-normal">
                                 What type of place is this?
                                 <span className="text-red-600 font-normal"> *</span>
                             </span>
-                            <select
-                                className="
+                    <select
+                        className="
                                                 block
                                                 w-full
                                                 mt-1
-                                                rounded-md
-                                                bg-gray-100
-                                                border-transparent
+                                                border
+                                                border-gray-300
+                                                text-gray-400
+                                                placeholder-gray-400
+                                                font-light
                                                 focus:border-gray-500 focus:bg-white focus:ring-0
                                               "
-                                onChange={this.changeHandler}
-                                name={'localityType'}
-                                required
-                            >
-                                <option>Apartment</option>
-                                <option>Independent Home</option>
-                                <option>Office</option>
-                                <option>School/College</option>
-                                <option>Restaurants/Cafe</option>
-                            </select>
-                        </label>
-                        <label className="block">
-                            <span className="text-gray-700 font-normal">Suggest another location?</span>
-                            <input
-                                type="text"
-                                name={"anotherLocation"}
-                                ref={this.autocompleteInput2}
-                                placeholder="Search your location..."
-                                className="
-                                            mt-1
-                                            block
-                                            w-full
-                                            rounded-md
-                                            bg-gray-100
-                                            border-transparent
-                                            focus:border-gray-500 focus:bg-white focus:ring-0
-                                          "
-                                type="text"/>
-                        </label>
-                        <div className="block">
-                            <div className="flex flex-row justify-end">
-                                <button className={this.state.isFormFilled ?
-                                    'block m-1 px-10 py-3 rounded-md bg-green-500 text-white border-transparent cursor-pointer' :
-                                    'block m-1 px-10 py-3 rounded-md bg-gray-300 text-white border-transparent cursor-pointer'}
-                                        onClick={this.onSubmit}
-                                        disabled={!this.state.isFormFilled}
-                                        value="Submit">Submit
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        onChange={this.changeHandler}
+                        name={'localityType'}
+                        required
+                    >
+                        <option>Apartment</option>
+                        <option>Independent Home</option>
+                        <option>Office</option>
+                        <option>School/College</option>
+                        <option>Restaurants/Cafe</option>
+                    </select>
+                </label>
+                {/*<label className="block">*/}
+                {/*    <span className="text-gray-700 font-normal">Suggest another location?</span>*/}
+                {/*    <input*/}
+                {/*        type="text"*/}
+                {/*        name={"anotherLocation"}*/}
+                {/*        ref={this.autocompleteInput2}*/}
+                {/*        placeholder="Search your location..."*/}
+                {/*        className="*/}
+                {/*                            mt-1*/}
+                {/*                            block*/}
+                {/*                            w-full*/}
+                {/*                            rounded-md*/}
+                {/*                            bg-gray-100*/}
+                {/*                            border-transparent*/}
+                {/*                            focus:border-gray-500 focus:bg-white focus:ring-0*/}
+                {/*                          "*/}
+                {/*        type="text"/>*/}
+                {/*</label>*/}
+                <div className="block">
+                    <div className="flex flex-row justify-end">
+                        <button className={this.state.isFormFilled ?
+                            'block m-1 w-full px-10 py-3 rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer' :
+                            'block m-1 w-full px-10 py-3 rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer'}
+                                onClick={this.onSubmit}
+                                disabled={!this.state.isFormFilled}
+                                value="Submit">Submit
+                        </button>
+                    </div>
                 </div>
+            </form>
+        </div>
+    }
+    render() {
+        return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
+            <div className="flex flex-col md:flex-row">
+                {this.renderContent()}
+                {this.renderForm()}
             </div>
         </div>)
     }
