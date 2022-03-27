@@ -7,8 +7,8 @@ import Form from "./Form";
 class App extends Component {
   render() {
     return (
-      <div className='flex-1 items-center justify-center h-screen m-10'>
-        <div className='text-black font-bold rounded-lg border shadow-lg p-10 m-20'>
+      <div className='flex-1 items-center justify-center m-4'>
+        <div className='text-black bg-green-100 font-bold rounded-lg border shadow-lg p-10'>
           <Form/>
         </div>
       </div>

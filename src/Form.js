@@ -21,6 +21,7 @@ class Form extends Component {
             localityType: '',
             anotherLocation: '',
             fetchingLocation: false,
+            isFormFilled: false,
         }
     }
 
@@ -29,10 +30,8 @@ class Form extends Component {
         //     types: ['geocode'],
         //     componentRestrictions: {country: "india", state: "bangalore"}
         // };
-        this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.current,
-            {"types": ["geocode"]});
-        this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current,
-            {"types": ["geocode"]});
+        this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.current, {"types": ["geocode"]});
+        this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current, {"types": ["geocode"]});
 
         this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
 
@@ -56,13 +55,16 @@ class Form extends Component {
     }
 
     onSubmit = e => {
-        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && this.state.latitude !== null && this.state.longitude !== null;
+        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && ((this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== null) && this.state.anotherLocation !== null;
         console.log('isFormFilled : ' + isFormFilled);
+
         isFormFilled && axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
             name: this.state.name,
             phone: this.state.phone,
             latitude: this.state.latitude,
             longitude: this.state.longitude,
+            address: this.state.address,
+            locality: this.state.localityType,
         })
             .then(response => {
                 debugger;
@@ -74,18 +76,43 @@ class Form extends Component {
             })
     }
 
+    validatePhoneNumber(input_str) {
+        var re = /(6|7|8|9)\d{9}/;
+
+        return re.test(input_str);
+    }
+
     changeHandler = (e) => {
-        this.setState({[e.target.name]: e.target.value})
-        console.log([e.target.name] + ',' + e.target.value);
+        this.setState({[e.target.name]: e.target.value}, () => {
+            const isLocationFetched = (this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== "";
+            const isFormFilled = this.state.name !== '' &&
+                this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) &&
+                isLocationFetched &&
+                this.state.localityType !== "";
+            this.setState({isFormFilled: isFormFilled});
+            // console.log([e.target.name] + ',' + e.target.value);
+            console.log('is name filled : ' + this.state.name !== '');
+            console.log('is Phone valid : ' + this.validatePhoneNumber(this.state.phone));
+            console.log('is Location fetched : ' + isLocationFetched);
+            console.log('isFormFilled : ' + this.state.isFormFilled);
+            console.log(this.state);
+        });
     }
 
     getCoordinates = (e) => {
         this.setState({fetchingLocation: true});
         navigator.geolocation.getCurrentPosition((position) => {
-            console.log("Latitude is :", position.coords.latitude);
-            console.log("Longitude is :", position.coords.longitude);
             this.setState({
-                latitude: position.coords.latitude, longitude: position.coords.longitude, fetchingLocation: false,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                fetchingLocation: false,
+            }, () => {
+                const isLocationFetched = (this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== "";
+                const isFormFilled = this.state.name !== '' &&
+                    this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) &&
+                    isLocationFetched &&
+                    this.state.localityType !== "";
+                this.setState({isFormFilled: isFormFilled});
             });
         });
         e.preventDefault();
@@ -93,22 +120,27 @@ class Form extends Component {
 
     render() {
         return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
-            <div className="py-12">
-                <h2 className="text-3xl font-bold text-center py-5">
-                    The future is Electric. Be part of it. </h2>
-                <p className="text-l font-normal text-center py-2">ElectricPe is India's largest Electric
-                    Vehicle Charging Stations Network. <br/>
-                    Electric Vehicle Ecosystem needs more and more distributed charging stations to help
-                    champions like you to switch to electric.</p>
-                <p className="text-l font-normal text-center py-2">Help ElectricPe by suggesting a location in
-                    and around your premises and win exciting rewards and EV Prizes. <br/>
-                    We'll start by collecting some basic demographic information.</p>
-                <p className="text-l font-normal text-center pt-20 font-bold">You just have to suggest the location, We
-                    will do the rest to electrify your location.</p>
-                <div className="mt-8 max-w-md m-auto">
+            <div className="flex flex-row">
+                <div className={'pr-12 w-2/3'}>
+                    <h2 className="text-3xl font-bold text-left py-5">
+                        The future is Electric. Be part of it. </h2>
+                    <p className="text-l font-normal text-left py-2">ElectricPe is India's largest Electric
+                        Vehicle Charging Stations Network. Electric Vehicle Ecosystem needs more and more distributed
+                        charging stations to help
+                        champions like you to switch to electric.</p>
+                    <p className="text-l font-normal left py-2">Help ElectricPe by suggesting a location in
+                        and around your premises and win exciting rewards and EV Prizes. We'll start by collecting some
+                        basic demographic information.</p>
+                </div>
+                <div className="mt-8 m-auto">
+                    <p className="text-l font-normal text-left font-bold">You just have to suggest the location, We
+                        will do the rest to electrify your location.</p>
                     <form className="grid grid-cols-1 gap-6">
                         <label className="block">
-                            <span className="after:content-['*'] text-gray-700 font-normal">Please tell us your full name?</span>
+                            <span className="text-gray-700 font-normal">
+                                Please tell us your full name?
+                                <span className="text-red-600 font-normal"> *</span>
+                            </span>
                             <input
                                 type="text"
                                 name={'name'}
@@ -127,7 +159,10 @@ class Form extends Component {
                             />
                         </label>
                         <label className="block">
-                            <span className="text-gray-700 font-normal">Please tell us your phone number</span>
+                            <span className="text-gray-700 font-normal">
+                                Please tell us your phone number
+                                <span className="text-red-600 font-normal"> *</span>
+                            </span>
                             <input
                                 type="text"
                                 name={'phone'}
@@ -141,14 +176,17 @@ class Form extends Component {
                                             focus:border-gray-500 focus:bg-white focus:ring-0
                                           "
                                 placeholder="+91-9876543210"
-                                pattern="(7|8|9)\d{9}"
+                                pattern="(6|7|8|9)\d{9}"
                                 onChange={this.changeHandler}
                                 required
                             />
                         </label>
                         <label className="block">
-                            <span className="text-gray-700 font-normal">Please suggest the location where you
-                                would want to have an Electric Vehicle Charging Station?</span>
+                            <span className="text-gray-700 font-normal">
+                                Please suggest the location where you
+                                would want to have an Electric Vehicle Charging Station?
+                                <span className="text-red-600 font-normal"> *</span>
+                            </span>
                             {this.state.fetchingLocation && <Puff stroke="#000"/>}
                             {this.state.latitude !== null && this.state.longitude !== null &&
                                 <p className="text-green-500 my-3 font-normal">Location fetch successful !!</p>}
@@ -181,11 +219,13 @@ class Form extends Component {
                                             border-transparent
                                             focus:border-gray-500 focus:bg-white focus:ring-0
                                           "
-                                required
                                 type="text"/>
                         </label>
                         <label className="block">
-                            <span className="text-gray-700 font-normal">What type of place is this?</span>
+                            <span className="text-gray-700 font-normal">
+                                What type of place is this?
+                                <span className="text-red-600 font-normal"> *</span>
+                            </span>
                             <select
                                 className="
                                                 block
@@ -227,16 +267,11 @@ class Form extends Component {
                         </label>
                         <div className="block">
                             <div className="flex flex-row justify-end">
-                                <button className="
-                                                block
-                                                m-1
-                                                px-10 py-3
-                                                rounded-md
-                                                bg-gray-100
-                                                border-transparent
-                                                cursor-pointer
-                                              "
+                                <button className={this.state.isFormFilled ?
+                                    'block m-1 px-10 py-3 rounded-md bg-green-500 text-white border-transparent cursor-pointer' :
+                                    'block m-1 px-10 py-3 rounded-md bg-gray-300 text-white border-transparent cursor-pointer'}
                                         onClick={this.onSubmit}
+                                        disabled={!this.state.isFormFilled}
                                         value="Submit">Submit
                                 </button>
                             </div>
