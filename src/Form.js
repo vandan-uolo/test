@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import './app.styles.scss';
 import axios from "axios";
 import {Puff} from "react-loading-icons"
-import {Link} from "react-router";
+import {browserHistory, Link} from "react-router";
+import SuccessScreen from "./SuccessScreen";
+import Geocode from "react-geocode";
 
 class Form extends Component {
     constructor() {
@@ -17,11 +19,14 @@ class Form extends Component {
             phone: '',
             latitude: null,
             longitude: null,
-            address: ' ',
+            address: '',
             localityType: '',
             anotherLocation: '',
             fetchingLocation: false,
             isFormFilled: false,
+            formSuccess: false,
+            currentLocation: 'Use current location',
+            formSubmitted: false,
         }
     }
 
@@ -40,7 +45,6 @@ class Form extends Component {
 
     handlePlaceChanged() {
         const place = this.autocomplete.getPlace();
-        debugger;
         this.setState({
             address: place,
         })
@@ -48,20 +52,16 @@ class Form extends Component {
 
     handleAnotherPlaceChanged() {
         const place2 = this.autocomplete2.getPlace();
-        debugger;
         this.setState({
             anotherLocation: place2,
         })
     }
 
 
-onSubmit = e => {
-        e.preventDefault();
-        // const navigate = useNavigate();
-        //
-        // if (toDashboard === true) {
-        //     return <Navigate to="/dashboard" />;
-        // }
+    onSubmit = e => {
+        this.setState({
+            formSubmitted: true,
+        })
         axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
             name: this.state.name,
             phone: this.state.phone,
@@ -69,14 +69,15 @@ onSubmit = e => {
             longitude: this.state.longitude,
             locality: this.state.localityType,
         }).then(response => {
-            debugger;
-            console.log('Form submission successful!!');
-            alert('Form submission successful!!');
+            this.setState({
+                formSuccess: true,
+            })
+            // console.log('Form submission successful!!');
+            // alert('Form submission successful!!');
         }).catch((err) => {
-            debugger;
             alert('Form submission failed !!');
         })
-
+        e.preventDefault();
     }
 
     validatePhoneNumber(input_str) {
@@ -85,37 +86,42 @@ onSubmit = e => {
         return re.test(input_str);
     }
 
+    isFormFilled = () => {
+        const isLocationFetched = (this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== "";
+        console.log('isLocationFetched :' + isLocationFetched);
+        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) && isLocationFetched && this.state.localityType !== "";
+        console.log('isFormFilled :' + isFormFilled);
+        return isFormFilled;
+    }
+
     changeHandler = (e) => {
         this.setState({[e.target.name]: e.target.value}, () => {
-            const isLocationFetched = (this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== "";
-            const isFormFilled = this.state.name !== '' &&
-                this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) &&
-                isLocationFetched &&
-                this.state.localityType !== "";
-            this.setState({isFormFilled: isFormFilled});
+            this.setState({isFormFilled: this.isFormFilled()});
             // console.log([e.target.name] + ',' + e.target.value);
-            console.log('is name filled : ' + this.state.name !== '');
-            console.log('is Phone valid : ' + this.validatePhoneNumber(this.state.phone));
-            console.log('is Location fetched : ' + isLocationFetched);
-            console.log('isFormFilled : ' + this.state.isFormFilled);
-            console.log(this.state);
+            // console.log('is name filled : ' + this.state.name !== '');
+            // console.log('is Phone valid : ' + this.validatePhoneNumber(this.state.phone));
+            // console.log('isFormFilled : ' + this.state.isFormFilled);
+            // console.log(this.state);
+        });
+    }
+
+    getAddressText = (position) => {
+        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyBTtJRLw5uHmKp_KepUseYrVABs5sLWYrc`).then((res) => {
+            this.setState({
+                currentLocation: res?.data?.results[0]?.formatted_address,
+                address: res?.data?.results[0]?.formatted_address,
+            })
         });
     }
 
     getCoordinates = (e) => {
         this.setState({fetchingLocation: true});
         navigator.geolocation.getCurrentPosition((position) => {
+            this.getAddressText(position);
             this.setState({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                fetchingLocation: false,
+                latitude: position.coords.latitude, longitude: position.coords.longitude, fetchingLocation: false,
             }, () => {
-                const isLocationFetched = (this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== "";
-                const isFormFilled = this.state.name !== '' &&
-                    this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) &&
-                    isLocationFetched &&
-                    this.state.localityType !== "";
-                this.setState({isFormFilled: isFormFilled});
+                this.setState({isFormFilled: this.isFormFilled()});
             });
         });
         e.preventDefault();
@@ -127,7 +133,8 @@ onSubmit = e => {
             <img className={'h-8 my-2 self-start'} src={this.props.elogo}/>
             <h2 className="text-4xl font-semibold text-left py-5">
                 Suggest and <br/><span className={'text-elegreen'}>earn</span></h2>
-            <p className="text-sm font-light text-left py-2 opacity-60">Help India’s largest Charging Station Network to setup
+            <p className="text-sm font-light text-left py-2 opacity-60">Help India’s largest Charging Station Network to
+                setup
                 locations and exciting cash rewards</p>
             <h3 className={'mt-5 font-semibold'}>How it works?</h3>
             <div className={'flex flex-row mb-10 mt-2'}>
@@ -147,6 +154,7 @@ onSubmit = e => {
         </div>
     }
 
+    gps = require('./assets/icons/gps.png');
 
     renderForm = () => {
         return <div className="p-6 pt-8 m-auto bg-white">
@@ -206,11 +214,10 @@ onSubmit = e => {
                                 Where would you like to have an EV charging station?
                                 <span className="text-red-600 font-normal"> *</span>
                             </span>
-                    {this.state.latitude !== null && this.state.longitude !== null &&
-                        <p className="text-elegreen my-3 font-normal">Location fetch successful!</p>}
-                    {this.state.latitude == null && this.state.longitude == null &&
-                        <button className="block
-                                                mt-3
+                    {/*{this.state.latitude !== null && this.state.longitude !== null &&*/}
+                    {/*    <p className="text-elegreen my-3 font-normal">Location fetch successful!</p>}*/}
+                    {/*{this.state.latitude == null && this.state.longitude == null &&*/}
+                    <a className="block mt-3
                                                 py-2
                                                 px-5
                                                 w-full
@@ -218,13 +225,18 @@ onSubmit = e => {
                                                 rounded-sm
                                                 bg-white
                                                 border
+                                                flex
+                                                flex-row
                                                 border-elegreen
                                                 focus:border-black-500 focus:ring-0
                                               "
-                        onClick={(e) => this.getCoordinates(e)}
-                    >Use current location
-                    </button>}
-                    {this.state.fetchingLocation && <Puff size={15} stroke="#4CBB17"/>}
+                       onClick={(e) => this.getCoordinates(e)}
+                    >
+                        {this.state.fetchingLocation ?
+                            <div className={'w-5 mr-2 resize self-center'}><Puff size={6} stroke="#4CBB17"/></div> :
+                            <img className={'w-5 m-2 resize self-center'} src={this.gps}/>}
+                        <p className={this.state.fetchingLocation ? 'ml-5 text-elegreen self-center' : 'ml-0 text-elegreen self-center'}>{this.state.currentLocation}</p>
+                    </a>
                     <p className="text-gray-700 my-3 font-normal">OR</p>
                     <input
                         type="text"
@@ -290,28 +302,36 @@ onSubmit = e => {
                 {/*                          "*/}
                 {/*        type="text"/>*/}
                 {/*</label>*/}
-                <div className="block">
-                    <div className="flex flex-row justify-end">
-                        <a className={this.state.isFormFilled ?
-                            'block m-1 w-full px-10 py-3 text-center rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer' :
-                            'block m-1 w-full px-10 py-3 text-center rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer'}
-                                onClick={this.onSubmit}
-                                disabled={false}
-                                // disabled={!this.state.isFormFilled}
-                        >Submit
-                        </a>
-                        {/*<Link to="/success">About Page</Link>*/}
-                        {/*<a href={'/success'}>Submit</a>*/}
-                    </div>
+                <div
+                    className={this.state.isFormFilled ?
+                        'block bg-elegreen' :
+                        'block bg-gray-300'}>
+                    <a className={'flex flex-row m-1 justify-center pr-3 w-full py-3 text-center rounded-sm border-transparent cursor-pointer'}
+                       onClick={(e) => {
+                           this.state.isFormFilled && this.onSubmit(e)
+                       }}
+                    >
+                        <p className={'text-white font-semibold mr-2'}>Submit</p>
+                        {this.state.formSubmitted ?
+                            <div className={'w-5 mr-2 resize self-center'}><Puff size={6} stroke="#FFFFFF"/></div> :
+                            <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>}
+                    </a>
                 </div>
             </form>
         </div>
     }
+
     render() {
         return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
             <div className="flex flex-col md:flex-row">
-                {this.renderContent()}
-                {this.renderForm()}
+                {this.state.formSuccess ? <SuccessScreen history={browserHistory}
+                                                         elocation={this.props.elocation}
+                                                         giftBox={this.props.giftBox}
+                                                         elogo={this.props.elogo}/> :
+                    <>
+                        {this.renderContent()}
+                        {this.renderForm()}
+                    </>}
             </div>
         </div>)
     }

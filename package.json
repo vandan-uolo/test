@@ -19,11 +19,12 @@
     "axios": "^0.26.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-geocode": "^0.2.3",
     "react-google-autocomplete": "^2.6.1",
     "react-loading-icons": "^1.0.8",
     "react-places-autocomplete": "^7.3.0",
-    "react-router-dom": "^6.2.2",
     "react-router": "^3.2.0",
+    "react-router-dom": "^6.2.2",
     "tailwindcss": "^2.2.7"
   },
   "main": "index.js",
