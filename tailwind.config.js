@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         elegreen: '#4CBB17',
         borderGray: '#666666',
+        borderGray1: '#E2E2E2',
+        bgGreen: '#F2FAEF',
       },
     },
   },

@@ -1,8 +1,8 @@
-import {Component} from 'react'
-import React from "react";
+import React, {Component} from 'react'
 import './app.styles.scss';
 import axios from "axios";
 import {Puff} from "react-loading-icons"
+import {Link} from "react-router";
 
 class Form extends Component {
     constructor() {
@@ -54,8 +54,14 @@ class Form extends Component {
         })
     }
 
-    onSubmit = e => {
-        debugger;
+
+onSubmit = e => {
+        e.preventDefault();
+        // const navigate = useNavigate();
+        //
+        // if (toDashboard === true) {
+        //     return <Navigate to="/dashboard" />;
+        // }
         axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
             name: this.state.name,
             phone: this.state.phone,
@@ -70,6 +76,7 @@ class Form extends Component {
             debugger;
             alert('Form submission failed !!');
         })
+
     }
 
     validatePhoneNumber(input_str) {
@@ -139,6 +146,7 @@ class Form extends Component {
             </div>
         </div>
     }
+
 
     renderForm = () => {
         return <div className="p-6 pt-8 m-auto bg-white">
@@ -284,13 +292,16 @@ class Form extends Component {
                 {/*</label>*/}
                 <div className="block">
                     <div className="flex flex-row justify-end">
-                        <button className={this.state.isFormFilled ?
-                            'block m-1 w-full px-10 py-3 rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer' :
-                            'block m-1 w-full px-10 py-3 rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer'}
+                        <a className={this.state.isFormFilled ?
+                            'block m-1 w-full px-10 py-3 text-center rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer' :
+                            'block m-1 w-full px-10 py-3 text-center rounded-sm bg-elegreen text-white font-semibold border-transparent cursor-pointer'}
                                 onClick={this.onSubmit}
-                                disabled={!this.state.isFormFilled}
-                                value="Submit">Submit
-                        </button>
+                                disabled={false}
+                                // disabled={!this.state.isFormFilled}
+                        >Submit
+                        </a>
+                        {/*<Link to="/success">About Page</Link>*/}
+                        {/*<a href={'/success'}>Submit</a>*/}
                     </div>
                 </div>
             </form>
