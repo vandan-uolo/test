@@ -311,9 +311,9 @@ class Form extends Component {
                            this.state.isFormFilled && this.onSubmit(e)
                        }}
                     >
-                        <p className={'text-white font-semibold mr-2'}>Submit</p>
+                        <p className={'text-white font-semibold mr-2 self-center'}>Submit</p>
                         {this.state.formSubmitted ?
-                            <div className={'w-5 mr-2 resize self-center'}><Puff size={6} stroke="#FFFFFF"/></div> :
+                            <div className={'w-3 resize self-center'}><Puff size={3} stroke="#FFFFFF"/></div> :
                             <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>}
                     </a>
                 </div>
