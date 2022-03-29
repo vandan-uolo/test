@@ -49,7 +49,11 @@ class Form extends Component {
         console.log('Called');
         const place = this.autocomplete.getPlace();
         this.setState({
-            address: place,
+            address: place?.formatted_address,
+        }, () => {
+            this.setState({
+                isFormFilled: this.isFormFilled()
+            });
         })
         console.log(this.state.address);
     }
@@ -60,6 +64,7 @@ class Form extends Component {
         this.setState({
             anotherLocation: place2,
         })
+        this.isFormFilled()
         console.log(this.state.anotherLocation);
     }
 
@@ -74,6 +79,7 @@ class Form extends Component {
             latitude: this.state.latitude,
             longitude: this.state.longitude,
             locality: this.state.localityType,
+            address: this.state.address,
         }).then(response => {
             this.setState({
                 formSuccess: true,
@@ -93,9 +99,13 @@ class Form extends Component {
     }
 
     isFormFilled = () => {
-        const isLocationFetched = (this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== "";
+        const isLocationFetched = this.state.latitude !== null && this.state.longitude !== null;
+        const isAddressEntered = this.state.address !== "";
+        const isAddressReceived = isLocationFetched || isAddressEntered;
         console.log('isLocationFetched :' + isLocationFetched);
-        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) && isLocationFetched && this.state.localityType !== "";
+        console.log('isAddressEntered :' + isAddressEntered);
+        console.log('isAddressReceived :' + isAddressReceived);
+        const isFormFilled = this.state.name !== '' && this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) && isAddressReceived && this.state.localityType !== "";
         console.log('isFormFilled :' + isFormFilled);
         return isFormFilled;
     }
