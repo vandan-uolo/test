@@ -22,6 +22,7 @@ class Form extends Component {
             longitude: null,
             address: '',
             localityType: 'Residential',
+            anotherLocalityType: '',
             anotherLocation: '',
             fetchingLocation: false,
             isFormFilled: false,
@@ -329,10 +330,10 @@ class Form extends Component {
                             e.preventDefault();
                             this.setState({localityType: 'Restaurant / Hotel'});
                         })}
-                        {/*{this.renderPill('Restaurant / Hotel', this.state.localityType === 'Restaurant / Hotel', (e) => {*/}
-                        {/*    e.preventDefault();*/}
-                        {/*    this.setState({localityType: 'Restaurant / Hotel'});*/}
-                        {/*})}*/}
+                        {this.renderPill('Others', this.state.localityType === 'Others', (e) => {
+                            e.preventDefault();
+                            this.setState({localityType: 'Others'});
+                        })}
                     </div>
                 </div>
                 <div className="block">
@@ -386,11 +387,32 @@ class Form extends Component {
                             </p>
                         </div>
                         <div className={'my-5 mt-2'}>
-                            {this.renderPill('Residential')}
-                            {this.renderPill('Office')}
-                            {this.renderPill('Warehouse')}
-                            {this.renderPill('School / College')}
-                            {this.renderPill('Restaurant / Hotel')}
+                            {this.renderPill('Residential', this.state.anotherLocalityType === 'Residential', (e) => {
+                                e.preventDefault();
+                                this.setState({
+                                    anotherLocalityType: 'Residential'
+                                });
+                            })}
+                            {this.renderPill('Office', this.state.anotherLocalityType === 'Office', (e) => {
+                                e.preventDefault();
+                                this.setState({anotherLocalityType: 'Office'});
+                            })}
+                            {this.renderPill('Warehouse', this.state.anotherLocalityType === 'Warehouse', (e) => {
+                                e.preventDefault();
+                                this.setState({anotherLocalityType: 'Warehouse'});
+                            })}
+                            {this.renderPill('School / College', this.state.anotherLocalityType === 'School / College', (e) => {
+                                e.preventDefault();
+                                this.setState({anotherLocalityType: 'School / College'});
+                            })}
+                            {this.renderPill('Restaurant / Hotel', this.state.anotherLocalityType === 'Restaurant / Hotel', (e) => {
+                                e.preventDefault();
+                                this.setState({anotherLocalityType: 'Restaurant / Hotel'});
+                            })}
+                            {this.renderPill('Others', this.state.anotherLocalityType === 'Others', (e) => {
+                                e.preventDefault();
+                                this.setState({anotherLocalityType: 'Others'});
+                            })}
                         </div>
                     </div>
                 </div>}
