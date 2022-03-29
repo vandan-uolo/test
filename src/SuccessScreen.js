@@ -7,11 +7,6 @@ import {Puff} from "react-loading-icons"
 class SuccessScreen extends Component {
     constructor() {
         super();
-        this.autocompleteInput = React.createRef();
-        this.autocompleteInput2 = React.createRef();
-        this.autocomplete = null;
-        this.autocomplete2 = null;
-        this.handlePlaceChanged = this.handlePlaceChanged.bind(this);
         this.state = {
             name: '',
             phone: '',
@@ -25,14 +20,6 @@ class SuccessScreen extends Component {
         }
     }
 
-    componentDidMount() {
-        this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.current, {"types": ["geocode"]});
-        this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current, {"types": ["geocode"]});
-
-        this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
-
-        this.autocomplete2.addListener('place_changed', this.handleAnotherPlaceChanged);
-    }
 
     handlePlaceChanged() {
         const place = this.autocomplete.getPlace();

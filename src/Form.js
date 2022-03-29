@@ -14,19 +14,21 @@ class Form extends Component {
         this.autocomplete = null;
         this.autocomplete2 = null;
         this.handlePlaceChanged = this.handlePlaceChanged.bind(this);
+        this.handleAnotherPlaceChanged = this.handleAnotherPlaceChanged.bind(this);
         this.state = {
             name: '',
-            phone: '',
+            phone: '+91-',
             latitude: null,
             longitude: null,
             address: '',
-            localityType: '',
+            localityType: 'Residential',
             anotherLocation: '',
             fetchingLocation: false,
             isFormFilled: false,
             formSuccess: false,
             currentLocation: 'Use current location',
             formSubmitted: false,
+            showAnotherLocation: '',
         }
     }
 
@@ -39,22 +41,25 @@ class Form extends Component {
         this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current, {"types": ["geocode"]});
 
         this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
-
         this.autocomplete2.addListener('place_changed', this.handleAnotherPlaceChanged);
     }
 
     handlePlaceChanged() {
+        console.log('Called');
         const place = this.autocomplete.getPlace();
         this.setState({
             address: place,
         })
+        console.log(this.state.address);
     }
 
     handleAnotherPlaceChanged() {
+        console.log('Called');
         const place2 = this.autocomplete2.getPlace();
         this.setState({
             anotherLocation: place2,
         })
+        console.log(this.state.anotherLocation);
     }
 
 
@@ -154,6 +159,15 @@ class Form extends Component {
         </div>
     }
 
+    renderPill = (text, isActive = false, onCLick) => {
+        return <button
+            className={isActive ? 'text-elegreen w-auto bg-bgGreen border-elegreen m-2 justify-center px-4 py-2 font-normal text-center border rounded-sm cursor-pointer' : 'text-black w-auto bg-white border-borderGray1 m-2 justify-center px-4 py-2 font-normal text-center border rounded-sm cursor-pointer'}
+            onClick={onCLick}
+        >
+            {text}
+        </button>
+    }
+
     gps = require('./assets/icons/gps.png');
 
     renderForm = () => {
@@ -161,10 +175,10 @@ class Form extends Component {
             <p className="text-l font-normal text-left font-semibold mb-5">Let’s start with a quick intro?</p>
             <form className="grid grid-cols-1 gap-6">
                 <label className="block">
-                            <span className="text-gray-700 text-sm font-semibold font-normal">
-                                Your name
-                                <span className="text-red-600 font-normal"> *</span>
-                            </span>
+            <span className="text-gray-700 text-sm font-semibold font-normal">
+            Your name
+            <span className="text-red-600 font-normal"> *</span>
+            </span>
                     <input
                         type="text"
                         name={'name'}
@@ -185,10 +199,10 @@ class Form extends Component {
                     />
                 </label>
                 <label className="block">
-                            <span className="text-gray-700 text-sm font-semibold font-normal">
-                                Phone number
-                                <span className="text-red-600 font-normal"> *</span>
-                            </span>
+            <span className="text-gray-700 text-sm font-semibold font-normal">
+            Phone number
+            <span className="text-red-600 font-normal"> *</span>
+            </span>
                     <input
                         type="text"
                         name={'phone'}
@@ -203,6 +217,7 @@ class Form extends Component {
                                             font-light
                                             focus:border-gray-300 focus:bg-white focus:ring-0
                                           "
+                        value={this.state.phone}
                         placeholder="+91-"
                         pattern="(6|7|8|9)\d{9}"
                         onChange={this.changeHandler}
@@ -210,10 +225,10 @@ class Form extends Component {
                     />
                 </label>
                 <label className="block">
-                            <span className="text-gray-700 text-sm font-semibold font-normal">
-                                Where would you like to have an EV charging station?
-                                <span className="text-red-600 font-normal"> *</span>
-                            </span>
+                    <span className="text-gray-700 text-sm font-semibold font-normal">
+                    Where would you like to have an EV charging station?
+                    <span className="text-red-600 font-normal"> *</span>
+                    </span>
                     {/*{this.state.latitude !== null && this.state.longitude !== null &&*/}
                     {/*    <p className="text-elegreen my-3 font-normal">Location fetch successful!</p>}*/}
                     {/*{this.state.latitude == null && this.state.longitude == null &&*/}
@@ -256,34 +271,129 @@ class Form extends Component {
                                           "
                         type="text"/>
                 </label>
-                <label className="block">
-                            <span className="text-gray-700 text-sm font-normal">
+                {/*    <label className="block">*/}
+                {/*<span className="text-gray-700 text-sm font-normal">*/}
+                {/*What type of place is this?*/}
+                {/*<span className="text-red-600 font-normal"> *</span>*/}
+                {/*</span>*/}
+                {/*        <select*/}
+                {/*            className="*/}
+                {/*                                    block*/}
+                {/*                                    w-full*/}
+                {/*                                    mt-1*/}
+                {/*                                    border*/}
+                {/*                                    border-gray-300*/}
+                {/*                                    text-gray-400*/}
+                {/*                                    placeholder-gray-400*/}
+                {/*                                    font-light*/}
+                {/*                                    focus:border-gray-500 focus:bg-white focus:ring-0*/}
+                {/*                                  "*/}
+                {/*            onChange={this.changeHandler}*/}
+                {/*            name={'localityType'}*/}
+                {/*            required*/}
+                {/*        >*/}
+                {/*            <option>Apartment</option>*/}
+                {/*            <option>Independent Home</option>*/}
+                {/*            <option>Office</option>*/}
+                {/*            <option>School/College</option>*/}
+                {/*            <option>Restaurants/Cafe</option>*/}
+                {/*        </select>*/}
+                {/*    </label>*/}
+                <div className="block">
+                    <div>
+                        <p className="text-gray-700 text-sm font-semibold font-normal">
+                            What type of place is this?
+                            <span className="text-red-600 font-normal"> *</span>
+                        </p>
+                    </div>
+                    <div className={'my-5 mt-2'}>
+                        {this.renderPill('Residential', this.state.localityType === 'Residential', (e) => {
+                            e.preventDefault();
+                            this.setState({
+                                localityType: 'Residential'
+                            });
+                        })}
+                        {this.renderPill('Office', this.state.localityType === 'Office', (e) => {
+                            e.preventDefault();
+                            this.setState({localityType: 'Office'});
+                        })}
+                        {this.renderPill('Warehouse', this.state.localityType === 'Warehouse', (e) => {
+                            e.preventDefault();
+                            this.setState({localityType: 'Warehouse'});
+                        })}
+                        {this.renderPill('School / College', this.state.localityType === 'School / College', (e) => {
+                            e.preventDefault();
+                            this.setState({localityType: 'School / College'});
+                        })}
+                        {this.renderPill('Restaurant / Hotel', this.state.localityType === 'Restaurant / Hotel', (e) => {
+                            e.preventDefault();
+                            this.setState({localityType: 'Restaurant / Hotel'});
+                        })}
+                        {/*{this.renderPill('Restaurant / Hotel', this.state.localityType === 'Restaurant / Hotel', (e) => {*/}
+                        {/*    e.preventDefault();*/}
+                        {/*    this.setState({localityType: 'Restaurant / Hotel'});*/}
+                        {/*})}*/}
+                    </div>
+                </div>
+                <div className="block">
+                    <div>
+                        <p className="text-gray-700 text-sm font-semibold font-normal">
+                            Do you want to add one more location?
+                        </p>
+                    </div>
+                    <div className={'my-5 mt-2'}>
+                        {this.renderPill('Yes', this.state.showAnotherLocation === 'Yes', (e) => {
+                            this.setState({
+                                showAnotherLocation: 'Yes',
+                            })
+                            e.preventDefault();
+                        })}
+                        {this.renderPill('No', this.state.showAnotherLocation === 'No', (e) => {
+                            this.setState({
+                                showAnotherLocation: 'No',
+                            })
+                            e.preventDefault();
+                        })}
+                    </div>
+                </div>
+                {this.state.showAnotherLocation === 'Yes' && <div>
+                    <label className="block w-auto">
+                        <p className="text-gray-700 text-sm font-semibold font-normal mb-2">
+                            Where would you like to have an EV charging station?
+                        </p>
+                        <input
+                            type="text"
+                            name={"anotherLocation"}
+                            ref={this.autocompleteInput2}
+                            placeholder="Search a location"
+                            id="autocomplete2"
+                            className="
+                                            mt-1
+                                            block
+                                            w-full
+                                            border
+                                            border-gray-300
+                                            placeholder-gray-400
+                                            font-light
+                                            focus:border-gray-300 focus:bg-white focus:ring-0
+                                          "
+                            type="text"/>
+                    </label>
+                    <div className="block mt-5">
+                        <div>
+                            <p className="text-gray-700 text-sm font-semibold font-normal">
                                 What type of place is this?
-                                <span className="text-red-600 font-normal"> *</span>
-                            </span>
-                    <select
-                        className="
-                                                block
-                                                w-full
-                                                mt-1
-                                                border
-                                                border-gray-300
-                                                text-gray-400
-                                                placeholder-gray-400
-                                                font-light
-                                                focus:border-gray-500 focus:bg-white focus:ring-0
-                                              "
-                        onChange={this.changeHandler}
-                        name={'localityType'}
-                        required
-                    >
-                        <option>Apartment</option>
-                        <option>Independent Home</option>
-                        <option>Office</option>
-                        <option>School/College</option>
-                        <option>Restaurants/Cafe</option>
-                    </select>
-                </label>
+                            </p>
+                        </div>
+                        <div className={'my-5 mt-2'}>
+                            {this.renderPill('Residential')}
+                            {this.renderPill('Office')}
+                            {this.renderPill('Warehouse')}
+                            {this.renderPill('School / College')}
+                            {this.renderPill('Restaurant / Hotel')}
+                        </div>
+                    </div>
+                </div>}
                 {/*<label className="block">*/}
                 {/*    <span className="text-gray-700 font-normal">Suggest another location?</span>*/}
                 {/*    <input*/}
@@ -303,9 +413,7 @@ class Form extends Component {
                 {/*        type="text"/>*/}
                 {/*</label>*/}
                 <div
-                    className={this.state.isFormFilled ?
-                        'block bg-elegreen' :
-                        'block bg-gray-300'}>
+                    className={this.state.isFormFilled ? 'block bg-elegreen' : 'block bg-gray-300'}>
                     <a className={'flex flex-row m-1 justify-center pr-3 w-full py-3 text-center rounded-sm border-transparent cursor-pointer'}
                        onClick={(e) => {
                            this.state.isFormFilled && this.onSubmit(e)
@@ -327,11 +435,10 @@ class Form extends Component {
                 {this.state.formSuccess ? <SuccessScreen history={browserHistory}
                                                          elocation={this.props.elocation}
                                                          giftBox={this.props.giftBox}
-                                                         elogo={this.props.elogo}/> :
-                    <>
-                        {this.renderContent()}
-                        {this.renderForm()}
-                    </>}
+                                                         elogo={this.props.elogo}/> : <>
+                    {this.renderContent()}
+                    {this.renderForm()}
+                </>}
             </div>
         </div>)
     }
