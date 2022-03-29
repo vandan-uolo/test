@@ -60,11 +60,16 @@ class Form extends Component {
     }
 
     componentDidMount() {
-        // var options = {
-        //     types: ['geocode'],
-        //     componentRestrictions: {country: "india", state: "bangalore"}
-        // };
-        this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.current, {"types": ["geocode"]});
+        const bangaloreBounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(12.864162, 77.438610),
+            new google.maps.LatLng(13.139807, 77.711895));
+        this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInput.current,
+            {
+                bounds: bangaloreBounds,
+                strictBounds: true,
+                componentRestrictions: { country: "in" },
+            }
+        );
         this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current, {"types": ["geocode"]});
 
         this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
