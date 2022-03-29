@@ -101,7 +101,7 @@ class SuccessScreen extends Component {
             </h2>
             <div className={'flex flex-row bg-white rounded-md border-elegreen border-dashed border my-4 py-3'}>
                 <img className={'resize self-center mr-3 w-1/4 ml-3 px-2'} src={this.paytm}/>
-                <p className={'text-l self-center flex flex-row font-semibold'}>₹10 Paytm Cash</p>
+                <p className={'text-l self-center flex flex-row font-semibold'}>₹{this.props.rewardAmount} Paytm Cash</p>
             </div>
             <p className="text-sm font-light text-left py-2 opacity-60">Our representative will connect with you to take
                 this forward.</p>
