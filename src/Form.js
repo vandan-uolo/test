@@ -498,7 +498,7 @@ class Form extends Component {
     render() {
         return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
             <div className="flex flex-col md:flex-row">
-                {!this.state.formSuccess ?
+                {this.state.formSuccess ?
                     <SuccessScreen
                         history={browserHistory}
                         elocation={this.props.elocation}
