@@ -93,17 +93,20 @@ class SuccessScreen extends Component {
     paytm = require('./assets/icons/paytm.png');
 
     renderSuccessDetails = () => {
-        return <div className={'w-full p-6 md:w-2/5'} style={{backgroundColor: '#F2FAEF'}}>
+        return <div className={'w-full p-6 pb-4 md:w-2/5'} style={{backgroundColor: '#F2FAEF'}}>
             <img className={'h-8 my-2 self-start'} src={this.props.elogo}/>
             <h2 className="text-xl flex flex-row font-semibold text-left py-5">
                 <img className={'w-10 resize self-center mr-4 ml-1'} src={this.trophy}/>
                 Yay, you have won a cash reward!
             </h2>
-            <div className={'flex flex-row bg-white rounded-md border-elegreen border-dashed border my-4 py-3'}>
+            <div className={'flex flex-row bg-white rounded-md border-elegreen border-opacity-60 border-dashed border my-4 py-3'}>
                 <img className={'resize self-center mr-3 w-1/4 ml-3 px-2'} src={this.paytm}/>
-                <p className={'text-l self-center flex flex-row font-semibold'}>₹{this.props.rewardAmount} Paytm Cash</p>
+                <p className={'text-l self-center flex flex-row font-semibold'}>₹{this.props.rewardAmount} Paytm
+                    Cash</p>
             </div>
-            <p className="text-sm font-light text-left py-2 opacity-60">Our representative will connect with you to take
+            <p className="text-xs font-semibold text-center pt-1"> ⭐ Get additional ₹1000 if your location is
+                approved</p>
+            <p className="text-xs font-light text-left py-2 opacity-60">Our representative will connect with you to take
                 this forward.</p>
         </div>
     }
@@ -113,10 +116,10 @@ class SuccessScreen extends Component {
     renderDownloadEmailSection = () => {
         return <div className={'bg-white p-6'}>
             <div className={'flex flex-row'}>
-                <div className={'flex flex-row bg-white w-full rounded-sm border-elegreen bg-bgGreen border mb-4 py-2'}>
+                <a href={'https://play.google.com/store/apps/details?id=com.wattapp.electricpe'} className={'flex flex-row bg-white w-full rounded-sm border-elegreen bg-bgGreen border mb-4 py-2'}>
                     <img className={'resize self-center w-10 mx-2 p-1'} src={this.playstore}/>
                     <p className={'text-sm self-center flex flex-row font-semibold'}>Download app to redeem rewards</p>
-                </div>
+                </a>
             </div>
             <form className="grid grid-cols-1 gap-6">
                 <label className="block">
@@ -143,11 +146,24 @@ class SuccessScreen extends Component {
                         required
                     />
                 </label>
-                <button
-                    className={'block w-full py-2 rounded-sm bg-elegreen text-white font-semibold cursor-pointer'}
-                    value="Submit">
-                    Get reward on email
-                </button>
+                <div
+                    className={'block bg-elegreen'}>
+                    <a className={'flex flex-row m-1 justify-center pr-3 w-full py-3 text-center rounded-sm border-transparent cursor-pointer'}
+                       onClick={(e) => {}}
+                    >
+                        <p className={'text-white font-semibold mr-2 self-center'}>Get reward on email</p>
+                        <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>
+                        {/*{this.state.formSubmitted ?*/}
+                        {/*    <div className={'w-3 resize self-center'}><Puff size={3} stroke="#FFFFFF"/></div> :*/}
+                        {/*    <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>}*/}
+                    </a>
+                </div>
+                {/*<button*/}
+                {/*    className={'flex flex-row justify-center block w-full py-2 rounded-sm bg-elegreen text-white font-semibold cursor-pointer'}*/}
+                {/*    value="Submit">*/}
+                {/*    Get reward on email*/}
+                {/*    <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>*/}
+                {/*</button>*/}
             </form>
         </div>
     }
@@ -157,9 +173,10 @@ class SuccessScreen extends Component {
     renderReferYourFriend = () => {
         return <div className={'p-6'} style={{backgroundColor: '#F2FAEF'}}>
             <p className={'text-sm self-center flex flex-row font-semibold mb-1'}>Refer your friends and earn more</p>
-            <div className={'flex flex-row justify-center bg-white w-full rounded-sm border-elegreen border my-2 py-2 w-1/2'}>
+            <div
+                className={'flex flex-row justify-center bg-white w-full rounded-sm border-elegreen border my-2 py-2 w-1/2'}>
                 <img className={'resize self-center w-4 mr-2'} src={this.whatsapp}/>
-                <p className={'text-sm text-elegreen self-center flex flex-row font-semibold'}>Refer now</p>
+                <a href={`href="whatsapp://send?text='Hi, I've earned instant cash rewards for sharing locations. ElectricPe is offering rewards for suggesting charging station locations. Check here: **link*'`} className={'text-sm text-elegreen self-center flex flex-row font-semibold'}>Refer now</a>
             </div>
         </div>
     }

@@ -4,7 +4,33 @@ import axios from "axios";
 import {Puff} from "react-loading-icons"
 import {browserHistory, Link} from "react-router";
 import SuccessScreen from "./SuccessScreen";
-import Geocode from "react-geocode";
+
+export const footer = () => {
+    return <div style={{backgroundColor: '#F5F5F5', padding: 24}}>
+        <a href={'https://Electricpe.com'}>
+            <p className={'text-sm text-borderGray pb-2'}>ElectricPe website</p>
+        </a>
+        <a>
+            <p className={'text-sm text-borderGray pb-2'}> Contact Us </p>
+        </a>
+        <div className={'flex flex-row my-2'}>
+            <a href={'https://www.linkedin.com/company/electricpe/'}>
+                <img className={'w-6 resize self-center mr-4'} src={require('./assets/icons/linkedin.png')}/>
+            </a>
+            <a href={'https://twitter.com/GoElectricPe'}>
+                <img className={'w-6 resize self-center mr-4'} src={require('./assets/icons/twitter.png')}/>
+            </a>
+            <a href={'https://www.instagram.com/goelectricpe/'}>
+                <img className={'w-6 resize self-center'} src={require('./assets/icons/insta.png')}/>
+            </a>
+        </div>
+        <div className={'mt-12 mb-5'}>
+            <img className={'w-28 resize self-center'} src={require('./assets/icons/electric_pe_logo.png')}/>
+            <p className="text-borderGray text-xs font-normal mt-1">🇮🇳 Ab banega bharat electric pe</p>
+        </div>
+        <p className="text-borderGray text-xs opacity-60 font-normal">Whatapp Technologies Private Limited</p>
+    </div>
+}
 
 class Form extends Component {
     constructor() {
@@ -148,22 +174,22 @@ class Form extends Component {
         return <div className={'w-full p-5 md:w-2/5'} style={{backgroundColor: '#F2FAEF'}}>
             <img className={'h-8 my-2 self-start'} src={this.props.elogo}/>
             <h2 className="text-4xl font-semibold text-left py-5">
-                Suggest and <br/><span className={'text-elegreen'}>earn</span></h2>
-            <p className="text-sm font-light text-left py-2 opacity-60">Help India’s largest Charging Station Network to
-                setup
-                locations and exciting cash rewards</p>
+                Suggest and <br/><span className={'text-elegreen'}>Earn.</span></h2>
+            <p className="text-lg  font-light text-left py-2 opacity-60">Help India’s largest Charging Station Network
+                to
+                setup locations and exciting cash rewards </p>
             <h3 className={'mt-5 font-semibold'}>How it works?</h3>
             <div className={'flex flex-row mb-10 mt-2'}>
                 <div className={"w-1/3 bg-white m-1 py-4 px-2 flex flex-col rounded-sm text-center justify-center"}>
                     <img className={'h-7 w-7 self-center'} src={this.props.elocation}/>
-                    <p className={"text-xs mt-2"}>Suggest a location</p>
+                    <p className={"text-xs mt-2"}>Suggest a nearby location</p>
                 </div>
                 <div className={"w-1/3 bg-white m-1 py-4 px-2 flex flex-col rounded-sm text-center justify-center"}>
                     <img className={'h-7 w-7 self-center'} src={this.props.giftBox}/>
-                    <p className={"text-xs mt-2"}>Redeem your reward</p>
+                    <p className={"text-xs mt-2"}>Get cash rewards on suggestions</p>
                 </div>
                 <div className={"w-1/3 bg-white m-1 py-4 px-2 flex flex-col rounded-sm text-center justify-center"}>
-                    <img className={'h-7 w-7 self-center'} src={this.props.elocation}/>
+                    <img className={'h-7 w-7 self-center'} src={require('./assets/icons/share.png')}/>
                     <p className={"text-xs mt-2"}>Share with friends</p>
                 </div>
             </div>
@@ -183,11 +209,11 @@ class Form extends Component {
 
     renderForm = () => {
         return <div className="p-6 pt-8 m-auto bg-white">
-            <p className="text-l font-normal text-left font-semibold mb-5">Let’s start with a quick intro?</p>
+            <p className="text-xl font-normal text-left font-semibold mb-5">Let’s start with a quick intro?</p>
             <form className="grid grid-cols-1 gap-6">
                 <label className="block">
             <span className="text-gray-700 text-sm font-semibold font-normal">
-            Your name
+            Full Name
             <span className="text-red-600 font-normal"> *</span>
             </span>
                     <input
@@ -212,7 +238,8 @@ class Form extends Component {
                 <label className="block">
             <span className="text-gray-700 text-sm font-semibold font-normal">
             Phone number
-            <span className="text-red-600 font-normal"> *</span>
+                <span className="text-red-600 font-normal"> *</span>
+            <p className="text-borderGray text-xs font-normal"> Trust us, we won’t spam you</p>
             </span>
                     <input
                         type="text"
@@ -224,6 +251,7 @@ class Form extends Component {
                                             rounded-sm
                                             border
                                             border-gray-300
+                                            text-borderGray
                                             placeholder-gray-400
                                             font-light
                                             focus:border-gray-300 focus:bg-white focus:ring-0
@@ -239,6 +267,7 @@ class Form extends Component {
                     <span className="text-gray-700 text-sm font-semibold font-normal">
                     Where would you like to have an EV charging station?
                     <span className="text-red-600 font-normal"> *</span>
+                        <p className="text-borderGray text-xs font-normal">Doesn’t need to be owned by you</p>
                     </span>
                     {/*{this.state.latitude !== null && this.state.longitude !== null &&*/}
                     {/*    <p className="text-elegreen my-3 font-normal">Location fetch successful!</p>}*/}
@@ -464,7 +493,7 @@ class Form extends Component {
     render() {
         return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
             <div className="flex flex-col md:flex-row">
-                {this.state.formSuccess ?
+                {!this.state.formSuccess ?
                     <SuccessScreen
                         history={browserHistory}
                         elocation={this.props.elocation}
@@ -476,6 +505,7 @@ class Form extends Component {
                         {this.renderContent()}
                         {this.renderForm()}
                     </>}
+                {footer()}
             </div>
         </div>)
     }
