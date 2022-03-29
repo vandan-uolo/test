@@ -173,11 +173,12 @@ class SuccessScreen extends Component {
     renderReferYourFriend = () => {
         return <div className={'p-6'} style={{backgroundColor: '#F2FAEF'}}>
             <p className={'text-sm self-center flex flex-row font-semibold mb-1'}>Refer your friends and earn more</p>
-            <div
+            <a
+                href={`whatsapp://send?text=Hi, I've earned instant cash rewards for sharing locations. ElectricPe is offering rewards for suggesting charging station locations. Check here: **link*`}
                 className={'flex flex-row justify-center bg-white w-full rounded-sm border-elegreen border my-2 py-2 w-1/2'}>
                 <img className={'resize self-center w-4 mr-2'} src={this.whatsapp}/>
-                <a href={`href="whatsapp://send?text='Hi, I've earned instant cash rewards for sharing locations. ElectricPe is offering rewards for suggesting charging station locations. Check here: **link*'`} className={'text-sm text-elegreen self-center flex flex-row font-semibold'}>Refer now</a>
-            </div>
+                <p className={'text-sm text-elegreen self-center flex flex-row font-semibold'}>Refer now</p>
+            </a>
         </div>
     }
 
