@@ -109,7 +109,8 @@ class Form extends Component {
     onSubmit = e => {
         this.setState({
             formSubmitted: true,
-        })
+        });
+        debugger;
         axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
             name: this.state.name,
             phone: this.state.phone,
@@ -121,8 +122,6 @@ class Form extends Component {
             this.setState({
                 formSuccess: true,
             })
-            // console.log('Form submission successful!!');
-            // alert('Form submission successful!!');
         }).catch((err) => {
             alert('Form submission failed !!');
         })
@@ -510,6 +509,7 @@ class Form extends Component {
                         elocation={this.props.elocation}
                         giftBox={this.props.giftBox}
                         elogo={this.props.elogo}
+                        name={this.state.name}
                         rewardAmount={this.state.anotherLocation !== '' ? 20 : 10}
                     />
                     : <>

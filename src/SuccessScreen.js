@@ -8,15 +8,8 @@ class SuccessScreen extends Component {
     constructor() {
         super();
         this.state = {
-            name: '',
-            phone: '',
-            latitude: null,
-            longitude: null,
-            address: ' ',
-            localityType: '',
-            anotherLocation: '',
-            fetchingLocation: false,
-            isFormFilled: false,
+            email: '',
+            emailSubmitted: false,
         }
     }
 
@@ -38,17 +31,15 @@ class SuccessScreen extends Component {
     }
 
     onSubmit = e => {
+        const url = `https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741/name/*${this.props.name}*`;
         debugger;
-        axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
-            name: this.state.name,
-            phone: this.state.phone,
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
-            locality: this.state.localityType,
+        console.log(url);
+        axios.patch(url, {
+            email: this.state.email,
         }).then(response => {
-            debugger;
-            console.log('Form submission successful!!');
-            alert('Form submission successful!!');
+            this.setState({
+                emailSubmitted: true,
+            })
         }).catch((err) => {
             debugger;
             alert('Form submission failed !!');
@@ -66,12 +57,6 @@ class SuccessScreen extends Component {
             const isLocationFetched = (this.state.latitude !== null && this.state.longitude !== null) || this.state.address !== "";
             const isFormFilled = this.state.name !== '' && this.state.phone !== '' && this.validatePhoneNumber(this.state.phone) && isLocationFetched && this.state.localityType !== "";
             this.setState({isFormFilled: isFormFilled});
-            // console.log([e.target.name] + ',' + e.target.value);
-            console.log('is name filled : ' + this.state.name !== '');
-            console.log('is Phone valid : ' + this.validatePhoneNumber(this.state.phone));
-            console.log('is Location fetched : ' + isLocationFetched);
-            console.log('isFormFilled : ' + this.state.isFormFilled);
-            console.log(this.state);
         });
     }
 
@@ -99,7 +84,8 @@ class SuccessScreen extends Component {
                 <img className={'w-10 resize self-center mr-4 ml-1'} src={this.trophy}/>
                 Yay, you have won a cash reward!
             </h2>
-            <div className={'flex flex-row bg-white rounded-md border-elegreen border-opacity-60 border-dashed border my-4 py-3'}>
+            <div
+                className={'flex flex-row bg-white rounded-md border-elegreen border-opacity-60 border-dashed border my-4 py-3'}>
                 <img className={'resize self-center mr-3 w-1/4 ml-3 px-2'} src={this.paytm}/>
                 <p className={'text-l self-center flex flex-row font-semibold'}>₹{this.props.rewardAmount} Paytm
                     Cash</p>
@@ -116,7 +102,8 @@ class SuccessScreen extends Component {
     renderDownloadEmailSection = () => {
         return <div className={'bg-white p-6'}>
             <div className={'flex flex-row'}>
-                <a href={'https://play.google.com/store/apps/details?id=com.wattapp.electricpe'} className={'flex flex-row bg-white w-full rounded-sm border-elegreen bg-bgGreen border mb-4 py-2'}>
+                <a href={'https://play.google.com/store/apps/details?id=com.wattapp.electricpe'}
+                   className={'flex flex-row bg-white w-full rounded-sm border-elegreen bg-bgGreen border mb-4 py-2'}>
                     <img className={'resize self-center w-10 mx-2 p-1'} src={this.playstore}/>
                     <p className={'text-sm self-center flex flex-row font-semibold'}>Download app to redeem rewards</p>
                 </a>
@@ -127,8 +114,8 @@ class SuccessScreen extends Component {
                                 Or get on your email
                             </span>
                     <input
-                        type="text"
-                        name={'name'}
+                        type="email"
+                        name={'email'}
                         className="
                                             mt-1
                                             block
@@ -143,27 +130,20 @@ class SuccessScreen extends Component {
                                           "
                         placeholder={'Enter your email address'}
                         onChange={this.changeHandler}
-                        required
                     />
                 </label>
-                <div
-                    className={'block bg-elegreen'}>
-                    <a className={'flex flex-row m-1 justify-center pr-3 w-full py-3 text-center rounded-sm border-transparent cursor-pointer'}
-                       onClick={(e) => {}}
-                    >
-                        <p className={'text-white font-semibold mr-2 self-center'}>Get reward on email</p>
-                        <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>
-                        {/*{this.state.formSubmitted ?*/}
-                        {/*    <div className={'w-3 resize self-center'}><Puff size={3} stroke="#FFFFFF"/></div> :*/}
-                        {/*    <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>}*/}
-                    </a>
-                </div>
-                {/*<button*/}
-                {/*    className={'flex flex-row justify-center block w-full py-2 rounded-sm bg-elegreen text-white font-semibold cursor-pointer'}*/}
-                {/*    value="Submit">*/}
-                {/*    Get reward on email*/}
-                {/*    <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>*/}
-                {/*</button>*/}
+                {this.state.emailSubmitted ?
+                    <p className={'text-elegreen -mt-4 font-normal text-left self-center text-sm'}>
+                        Thanks for sharing your email! <br/><span className={'text-xs'}>Your rewards will be shared soon on the above email.</span>
+                    </p> : <div
+                        className={'block bg-elegreen'}>
+                        <a className={'flex flex-row m-1 justify-center pr-3 w-full py-3 text-center rounded-sm border-transparent cursor-pointer'}
+                           onClick={(e) => this.onSubmit(e)}
+                        >
+                            <p className={'text-white font-semibold mr-2 self-center'}>Get reward on email</p>
+                            <img className={'w-6 resize self-center'} src={require('./assets/icons/arrowr.png')}/>
+                        </a>
+                    </div>}
             </form>
         </div>
     }
