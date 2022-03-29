@@ -181,7 +181,7 @@ class Form extends Component {
 
 
     renderContent = () => {
-        return <div className={'w-full p-5 md:w-2/5'} style={{backgroundColor: '#F2FAEF'}}>
+        return <div className={'w-full p-5 md:w-full'} style={{backgroundColor: '#F2FAEF'}}>
             <img className={'h-8 my-2 self-start'} src={this.props.elogo}/>
             <h2 className="text-4xl font-semibold text-left py-5">
                 Suggest and <br/><span className={'text-elegreen'}>Earn.</span></h2>
@@ -501,8 +501,8 @@ class Form extends Component {
     }
 
     render() {
-        return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
-            <div className="flex flex-col md:flex-row">
+        return (<div className="max-w-xl mx-auto divide-y md:max-w-2xl" style={{backgroundColor: '#F2FAEF'}}>
+            <div className="flex flex-col max-w-xl mx-auto divide-y md:max-w-xl">
                 {this.state.formSuccess ?
                     <SuccessScreen
                         history={browserHistory}

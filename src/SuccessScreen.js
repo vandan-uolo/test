@@ -78,7 +78,7 @@ class SuccessScreen extends Component {
     paytm = require('./assets/icons/paytm.png');
 
     renderSuccessDetails = () => {
-        return <div className={'w-full p-6 pb-4 md:w-2/5'} style={{backgroundColor: '#F2FAEF'}}>
+        return <div className={'w-full p-6 pb-4'} style={{backgroundColor: '#F2FAEF'}}>
             <img className={'h-8 my-2 self-start'} src={this.props.elogo}/>
             <h2 className="text-xl flex flex-row font-semibold text-left py-5">
                 <img className={'w-10 resize self-center mr-4 ml-1'} src={this.trophy}/>
@@ -163,8 +163,8 @@ class SuccessScreen extends Component {
     }
 
     render() {
-        return (<div className="max-w-xl mx-auto divide-y md:max-w-4xl">
-            <div className="flex flex-col md:flex-row">
+        return (<div className="max-w-xl divide-y md:max-w-2xl">
+            <div className="flex flex-col">
                 {this.renderSuccessDetails()}
                 {this.renderDownloadEmailSection()}
                 {this.renderReferYourFriend()}
