@@ -26,7 +26,7 @@ export const footer = () => {
         </div>
         <div className={'mt-12 mb-5'}>
             <img className={'w-28 resize self-center'} src={require('./assets/icons/electric_pe_logo.png')}/>
-            <p className="text-borderGray text-xs font-normal mt-1">🇮🇳 Ab banega bharat electric pe</p>
+            <p className="text-borderGray text-xs font-normal mt-1">🇮🇳 Ab India Chalega ElectricPe</p>
         </div>
         <p className="text-borderGray text-xs opacity-60 font-normal">Whatapp Technologies Private Limited</p>
     </div>
@@ -67,10 +67,16 @@ class Form extends Component {
             {
                 bounds: bangaloreBounds,
                 strictBounds: true,
-                componentRestrictions: { country: "in" },
+                componentRestrictions: {country: "in"},
             }
         );
-        this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current, {"types": ["geocode"]});
+        this.autocomplete2 = new google.maps.places.Autocomplete(this.autocompleteInput2.current,
+            {
+                bounds: bangaloreBounds,
+                strictBounds: true,
+                componentRestrictions: {country: "in"},
+            }
+        );
 
         this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
         this.autocomplete2.addListener('place_changed', this.handleAnotherPlaceChanged);
@@ -401,7 +407,7 @@ class Form extends Component {
                         })}
                     </div>
                 </div>
-                {this.state.showAnotherLocation === 'Yes' && <div>
+                <div className={this.state.showAnotherLocation === 'Yes' ? '' : 'hidden'}>
                     <label className="block w-auto">
                         <p className="text-gray-700 text-sm font-semibold font-normal mb-2">
                             Where would you like to have an EV charging station?
@@ -459,7 +465,7 @@ class Form extends Component {
                             })}
                         </div>
                     </div>
-                </div>}
+                </div>
                 {/*<label className="block">*/}
                 {/*    <span className="text-gray-700 font-normal">Suggest another location?</span>*/}
                 {/*    <input*/}
