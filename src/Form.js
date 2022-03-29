@@ -11,7 +11,7 @@ export const footer = () => {
             <p className={'text-sm text-borderGray pb-2'}>ElectricPe website</p>
         </a>
         <a>
-            <p className={'text-sm text-borderGray pb-2'}> Contact Us </p>
+            <p className={'text-sm text-borderGray pb-2'}> Follow Us </p>
         </a>
         <div className={'flex flex-row my-2'}>
             <a href={'https://www.linkedin.com/company/electricpe/'}>
