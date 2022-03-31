@@ -31,11 +31,11 @@ class SuccessScreen extends Component {
     }
 
     onSubmit = e => {
-        const url = `https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741/name/*${this.props.name}*`;
+        const url = `https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741/Name/*${this.props.name}*`;
         debugger;
         console.log(url);
         axios.patch(url, {
-            email: this.state.email,
+            Email: this.state.email,
         }).then(response => {
             this.setState({
                 emailSubmitted: true,

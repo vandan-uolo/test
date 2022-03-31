@@ -101,7 +101,7 @@ class Form extends Component {
         console.log('Called');
         const place2 = this.autocomplete2.getPlace();
         this.setState({
-            anotherLocation: place2,
+            anotherLocation: place2?.formatted_address,
         })
         this.isFormFilled()
         console.log(this.state.anotherLocation);
@@ -114,12 +114,13 @@ class Form extends Component {
         });
         debugger;
         axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
-            name: this.state.name,
-            phone: this.state.phone,
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
-            locality: this.state.localityType,
-            address: this.state.address,
+            Name: this.state.name,
+            Phone: this.state.phone,
+            Latitude: this.state.latitude,
+            Longitude: this.state.longitude,
+            Locality: this.state.localityType,
+            Address: this.state.address,
+            Address2: this.state.anotherLocation ? this.state.anotherLocation : 'Not provided',
         }).then(response => {
             this.setState({
                 formSuccess: true,
