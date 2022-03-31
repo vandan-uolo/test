@@ -126,7 +126,7 @@ class Form extends Component {
         }).catch((err) => {
             alert('Form submission failed !!');
         })
-        hotjar.identify(this.state.phone, { name: this.state.name });
+        hotjar.identify(`${this.state.phone}`, { name: this.state.name });
         e.preventDefault();
     }
 
