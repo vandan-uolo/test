@@ -57,6 +57,7 @@ class Form extends Component {
             currentLocation: 'Use current location',
             formSubmitted: false,
             showAnotherLocation: '',
+            showLocationAccessError: false,
         }
     }
 
@@ -126,7 +127,7 @@ class Form extends Component {
         }).catch((err) => {
             alert('Form submission failed !!');
         })
-        hotjar.identify(`${this.state.phone}`, { name: this.state.name });
+        hotjar.identify(`${this.state.phone}`, {name: this.state.name});
         e.preventDefault();
     }
 
@@ -169,15 +170,22 @@ class Form extends Component {
     }
 
     getCoordinates = (e) => {
-        this.setState({fetchingLocation: true});
-        navigator.geolocation.getCurrentPosition((position) => {
-            this.getAddressText(position);
-            this.setState({
-                latitude: position.coords.latitude, longitude: position.coords.longitude, fetchingLocation: false,
-            }, () => {
-                this.setState({isFormFilled: this.isFormFilled()});
+            this.setState({fetchingLocation: true});
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.getAddressText(position);
+                this.setState({
+                    latitude: position.coords.latitude, longitude: position.coords.longitude, fetchingLocation: false,
+                }, () => {
+                    this.setState({isFormFilled: this.isFormFilled()});
+                });
+            }, (error) => {
+                if (error?.code === 1) {
+                    this.setState({
+                        showLocationAccessError: true,
+                        fetchingLocation: false,
+                    })
+                }
             });
-        });
         e.preventDefault();
     }
 
@@ -304,7 +312,12 @@ class Form extends Component {
                             <img className={'w-5 m-2 resize self-center'} src={this.gps}/>}
                         <p className={this.state.fetchingLocation ? 'ml-5 text-elegreen self-center' : 'ml-0 text-elegreen self-center'}>{this.state.currentLocation}</p>
                     </a>
-                    <p className="text-gray-700 my-3 font-normal">OR</p>
+                    {this.state.showLocationAccessError &&
+                        <p className="text-red-700 text-right text-xs pt-2 font-normal">
+                            Location Access Error!! <br/>Please enable location access and try again.<br/>(<b>Settings
+                            -> Security & Privacy -> Location : Allow</b>)
+                        </p>}
+                    <p className="text-gray-700 my-3 text-center font-normal">or</p>
                     <input
                         type="text"
                         name={"address"}
