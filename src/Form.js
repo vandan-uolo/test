@@ -4,6 +4,7 @@ import axios from "axios";
 import {Puff} from "react-loading-icons"
 import {browserHistory, Link} from "react-router";
 import SuccessScreen from "./SuccessScreen";
+import {hotjar} from "react-hotjar";
 
 export const footer = () => {
     return <div style={{backgroundColor: '#F5F5F5', padding: 24}}>
@@ -125,6 +126,7 @@ class Form extends Component {
         }).catch((err) => {
             alert('Form submission failed !!');
         })
+        hotjar.identify(this.state.phone, { name: this.state.name });
         e.preventDefault();
     }
 

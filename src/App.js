@@ -6,6 +6,8 @@ import Form from "./Form";
 import SuccessScreen from "./SuccessScreen";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import {browserHistory} from "react-router";
+import ReactGA from 'react-ga';
+import { hotjar } from 'react-hotjar';
 
 
 class App extends Component {
@@ -14,10 +16,17 @@ class App extends Component {
     giftBox = require('./assets/icons/gift-box.png');
     elogo = require('./assets/icons/electric_pe_logo.png');
 
+    trackingId = "G-RQJW7QVZPD";
+
+    componentDidMount() {
+        ReactGA.initialize(this.trackingId);
+        hotjar.initialize(2902908, 6);
+    }
+
     form = <Form history={browserHistory} onFormSubmitSuccess={this.onFormSubmitSuccess} elocation={this.elocation}
                  giftBox={this.giftBox} elogo={this.elogo}/>;
-
     successScreen = <SuccessScreen history={browserHistory} elocation={this.elocation} giftBox={this.giftBox} elogo={this.elogo}/>;
+
     render() {
         return (
             <Router history={browserHistory}>
