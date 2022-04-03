@@ -16,7 +16,6 @@ class SuccessScreen extends Component {
 
     handlePlaceChanged() {
         const place = this.autocomplete.getPlace();
-        debugger;
         this.setState({
             address: place,
         })
@@ -24,7 +23,6 @@ class SuccessScreen extends Component {
 
     handleAnotherPlaceChanged() {
         const place2 = this.autocomplete2.getPlace();
-        debugger;
         this.setState({
             anotherLocation: place2,
         })
@@ -32,7 +30,6 @@ class SuccessScreen extends Component {
 
     onSubmit = e => {
         const url = `https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741/Name/*${this.props.name}*`;
-        debugger;
         console.log(url);
         axios.patch(url, {
             Email: this.state.email,
@@ -41,7 +38,6 @@ class SuccessScreen extends Component {
                 emailSubmitted: true,
             })
         }).catch((err) => {
-            debugger;
             alert('Form submission failed !!');
         })
     }
@@ -154,7 +150,7 @@ class SuccessScreen extends Component {
         return <div className={'p-6'} style={{backgroundColor: '#F2FAEF'}}>
             <p className={'text-sm self-center flex flex-row font-semibold mb-1'}>Refer your friends and earn more</p>
             <a
-                href={`whatsapp://send?text=Hi, I've earned instant cash rewards for sharing locations. ElectricPe is offering rewards for suggesting charging station locations. Check here: **https://exquisite-taffy-a48746.netlify.app/*`}
+                href={`whatsapp://send?text=Hi, I've earned instant cash rewards for sharing locations. ElectricPe is offering rewards for suggesting charging station locations. Check here: **https://suggest.electricpe.com/*`}
                 className={'flex flex-row justify-center bg-white w-full rounded-sm border-elegreen border my-2 py-2 w-1/2'}>
                 <img className={'resize self-center w-4 mr-2'} src={this.whatsapp}/>
                 <p className={'text-sm text-elegreen self-center flex flex-row font-semibold'}>Refer now</p>

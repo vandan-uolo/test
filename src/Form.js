@@ -58,6 +58,7 @@ class Form extends Component {
             formSubmitted: false,
             showAnotherLocation: '',
             showLocationAccessError: false,
+            isSubmitClicked: true,
         }
     }
 
@@ -109,10 +110,11 @@ class Form extends Component {
 
 
     onSubmit = e => {
+        console.log('Form submitted');
         this.setState({
             formSubmitted: true,
+            isSubmitClicked: false,
         });
-        debugger;
         axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
             Name: this.state.name,
             Phone: this.state.phone,
@@ -120,8 +122,10 @@ class Form extends Component {
             Longitude: this.state.longitude,
             Locality: this.state.localityType,
             Address: this.state.address,
+            Locality2: this.state.anotherLocalityType,
             Address2: this.state.anotherLocation ? this.state.anotherLocation : 'Not provided',
         }).then(response => {
+            window.scrollTo(0, 0);
             this.setState({
                 formSuccess: true,
             })
@@ -163,6 +167,7 @@ class Form extends Component {
 
     getAddressText = (position) => {
         axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyBTtJRLw5uHmKp_KepUseYrVABs5sLWYrc`).then((res) => {
+            console.log(JSON.stringify(res));
             this.setState({
                 currentLocation: res?.data?.results[0]?.formatted_address,
                 address: res?.data?.results[0]?.formatted_address,
@@ -503,7 +508,7 @@ class Form extends Component {
                     className={this.state.isFormFilled ? 'block bg-elegreen' : 'block bg-gray-300'}>
                     <a className={'flex flex-row m-1 justify-center pr-3 w-full py-3 text-center rounded-sm border-transparent cursor-pointer'}
                        onClick={(e) => {
-                           this.state.isFormFilled && this.onSubmit(e)
+                           this.state.isFormFilled && this.state.isSubmitClicked && this.onSubmit(e)
                        }}
                     >
                         <p className={'text-white font-semibold mr-2 self-center'}>Submit</p>
