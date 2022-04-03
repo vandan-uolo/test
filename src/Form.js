@@ -108,6 +108,26 @@ class Form extends Component {
         console.log(this.state.anotherLocation);
     }
 
+    onPhoneNumberEntered = () => {
+        console.log('Phone input unfocused');
+        if(this.validatePhoneNumber(this.state.phone)){
+            console.log('Phone number validated');
+            axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
+                Name: '',
+                Phone: this.state.phone.slice(this.state.phone.length - 10),
+                Latitude: '',
+                Longitude: '',
+                Locality: '',
+                Address: '',
+                Locality2: '',
+                Address2: '',
+            }).then(response => {
+                console.log('Phone number submitted');
+            }).catch((err) => {
+                console.log('Phone number submission failed');
+            })
+        }
+    }
 
     onSubmit = e => {
         console.log('Form submitted');
@@ -115,9 +135,9 @@ class Form extends Component {
             formSubmitted: true,
             isSubmitClicked: false,
         });
-        axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
+        const url = `https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741/Phone/*${this.state.phone.slice(this.state.phone.length - 10)}*`;
+        axios.patch(url, {
             Name: this.state.name,
-            Phone: this.state.phone,
             Latitude: this.state.latitude,
             Longitude: this.state.longitude,
             Locality: this.state.localityType,
@@ -283,6 +303,7 @@ class Form extends Component {
                                             focus:border-gray-300 focus:bg-white focus:ring-0
                                           "
                         value={this.state.phone}
+                        onBlur={this.onPhoneNumberEntered}
                         placeholder="+91-"
                         pattern="(6|7|8|9)\d{9}"
                         onChange={this.changeHandler}
@@ -342,34 +363,6 @@ class Form extends Component {
                                           "
                         type="text"/>
                 </label>
-                {/*    <label className="block">*/}
-                {/*<span className="text-gray-700 text-sm font-normal">*/}
-                {/*What type of place is this?*/}
-                {/*<span className="text-red-600 font-normal"> *</span>*/}
-                {/*</span>*/}
-                {/*        <select*/}
-                {/*            className="*/}
-                {/*                                    block*/}
-                {/*                                    w-full*/}
-                {/*                                    mt-1*/}
-                {/*                                    border*/}
-                {/*                                    border-gray-300*/}
-                {/*                                    text-gray-400*/}
-                {/*                                    placeholder-gray-400*/}
-                {/*                                    font-light*/}
-                {/*                                    focus:border-gray-500 focus:bg-white focus:ring-0*/}
-                {/*                                  "*/}
-                {/*            onChange={this.changeHandler}*/}
-                {/*            name={'localityType'}*/}
-                {/*            required*/}
-                {/*        >*/}
-                {/*            <option>Apartment</option>*/}
-                {/*            <option>Independent Home</option>*/}
-                {/*            <option>Office</option>*/}
-                {/*            <option>School/College</option>*/}
-                {/*            <option>Restaurants/Cafe</option>*/}
-                {/*        </select>*/}
-                {/*    </label>*/}
                 <div className="block">
                     <div>
                         <p className="text-gray-700 text-sm font-semibold font-normal">
