@@ -112,7 +112,7 @@ class Form extends Component {
         console.log('Phone input unfocused');
         if(this.validatePhoneNumber(this.state.phone)){
             console.log('Phone number validated');
-            axios.post('https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741', {
+            axios.post('https://sheet.best/api/sheets/04dd312c-fd26-47ad-a751-e8493fbaaa4c', {
                 Name: '',
                 Phone: this.state.phone.slice(this.state.phone.length - 10),
                 Latitude: '',
@@ -135,7 +135,7 @@ class Form extends Component {
             formSubmitted: true,
             isSubmitClicked: false,
         });
-        const url = `https://sheet.best/api/sheets/6c941f48-186b-4760-9bcf-742353634741/Phone/*${this.state.phone.slice(this.state.phone.length - 10)}*`;
+        const url = `https://sheet.best/api/sheets/04dd312c-fd26-47ad-a751-e8493fbaaa4c/Phone/*${this.state.phone.slice(this.state.phone.length - 10)}*`;
         axios.patch(url, {
             Name: this.state.name,
             Latitude: this.state.latitude,
