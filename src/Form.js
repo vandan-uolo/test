@@ -29,7 +29,7 @@ export const footer = () => {
             <img className={'w-28 resize self-center'} src={require('./assets/icons/electric_pe_logo.png')}/>
             <p className="text-borderGray text-xs font-normal mt-1">🇮🇳 Ab India Chalega ElectricPe</p>
         </div>
-        <p className="text-borderGray text-xs opacity-60 font-normal">Whatapp Technologies Private Limited</p>
+        <p className="text-borderGray text-xs opacity-60 font-normal">Wattapp Technologies Private Limited</p>
     </div>
 }
 
@@ -112,7 +112,7 @@ class Form extends Component {
         console.log('Phone input unfocused');
         if(this.validatePhoneNumber(this.state.phone)){
             console.log('Phone number validated');
-            axios.post('https://sheet.best/api/sheets/04dd312c-fd26-47ad-a751-e8493fbaaa4c', {
+            axios.post('https://sheet.best/api/sheets/a9a0a2bf-b149-4832-83aa-63718736a593', {
                 Name: '',
                 Phone: this.state.phone.slice(this.state.phone.length - 10),
                 Latitude: '',
@@ -135,7 +135,7 @@ class Form extends Component {
             formSubmitted: true,
             isSubmitClicked: false,
         });
-        const url = `https://sheet.best/api/sheets/04dd312c-fd26-47ad-a751-e8493fbaaa4c/Phone/*${this.state.phone.slice(this.state.phone.length - 10)}*`;
+        const url = `https://sheet.best/api/sheets/a9a0a2bf-b149-4832-83aa-63718736a593/Phone/*${this.state.phone.slice(this.state.phone.length - 10)}*`;
         axios.patch(url, {
             Name: this.state.name,
             Latitude: this.state.latitude,
